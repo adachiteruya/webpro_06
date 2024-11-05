@@ -43,3 +43,23 @@ win --> end1
 if -->|no| lose
 lose --> end1
 ```
+
+## じゃんけんのフローチャート
+```mermaid
+flowchart TD;
+
+start["開始"];
+end1["終了"]
+if{"じゃんけんの勝敗"}
+win["勝ち"]
+tie["あいこ"]
+lose["負け"]
+
+start --> if
+if -->|win| win
+win --> end1
+if -->|tie| tie
+tie --> end1
+if -->|lose| lose
+lose --> end1
+```
