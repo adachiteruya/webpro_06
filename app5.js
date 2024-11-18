@@ -22,7 +22,11 @@ app.get("/luck", (req, res) => {
   const num = Math.floor( Math.random() * 6 + 1 );
   let luck = '';
   if( num==1 ) luck = '大吉';
-  else if( num==2 ) luck = '中吉';
+  else if( num==2 ) luck = '吉';
+  else if( num==3 ) luck = '中吉';
+  else if( num==4 ) luck = '小吉';
+  else if( num==5 ) luck = '末吉';
+  else if( num==6 ) luck = '凶';
   console.log( 'あなたの運勢は' + luck + 'です' );
   res.render( 'luck', {number:num, luck:luck} );
 });
@@ -31,14 +35,13 @@ app.get("/janken", (req, res) => {
   let hand = req.query.hand;
   let win = Number( req.query.win );
   let total = Number( req.query.total );
-  console.log( {hand, win, total});
+  console.log( {hand, win, total} );
   const num = Math.floor( Math.random() * 3 + 1 );
   let cpu = '';
   if( num==1 ) cpu = 'グー';
   else if( num==2 ) cpu = 'チョキ';
   else cpu = 'パー';
-  // ここに勝敗の判定を入れる
-  // 今はダミーで人間の勝ちにしておく
+  
   let judgement = '';
   if( hand == 'グー' ) {
     if( num==1 ) {judgement = 'あいこ';}
@@ -58,8 +61,7 @@ app.get("/janken", (req, res) => {
     else {judgement = 'あいこ';}
     total += 1;
   }
-  //win += 1;
-  //total += 1;
+  
   const display = {
     your: hand,
     cpu: cpu,
@@ -74,15 +76,14 @@ app.get("/hoi", (req, res) => {
   let face = req.query.face;
   let win = Number( req.query.win );
   let total = Number( req.query.total );
-  console.log( {face, win, total});
+  console.log( {face, win, total} );
   const num = Math.floor( Math.random() * 4 + 1 );
   let cpu = '';
   if( num==1 ) cpu = '上';
   else if( num==2 ) cpu = '下';
   else if( num==3 ) cpu = '左';
   else cpu = '右';
-  // ここに勝敗の判定を入れる
-  // 今はダミーで人間の勝ちにしておく
+  
   let judgement = '';
   if( face == '上' ) {
     if( num==1 ) {judgement = '負け';}
@@ -112,8 +113,7 @@ app.get("/hoi", (req, res) => {
     else {judgement = '負け';}
     total += 1;
   }
-  //win += 1;
-  //total += 1;
+  
   const display = {
     your: face,
     cpu: cpu,
@@ -124,6 +124,72 @@ app.get("/hoi", (req, res) => {
   res.render( 'hoi', display );
 });
 
+app.get("/size", (req, res) => {
+  let choice = req.query.choice;
+  let win = Number( req.query.win );
+  let total = Number( req.query.total );
+  console.log( {choice, win, total} );
 
+  // 1から5の数字を配列に格納
+  let numbers = [1, 2, 3, 4, 5];
+
+  // 配列をシャッフルする関数（Fisher-Yatesアルゴリズム）
+  function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1)); // 0からiの間でランダムなインデックスを選ぶ
+          [arr[i], arr[j]] = [arr[j], arr[i]]; // 要素を交換
+      }
+  }
+
+  // 配列をシャッフル
+  shuffleArray(numbers);
+
+  // それぞれの変数に代入
+  let a = numbers[0];
+  let b = numbers[1];
+  let c = numbers[2];
+  let d = numbers[3];
+  let e = numbers[4];
+
+  let num1;
+  if( choice === 'A' ){ num1 = a; }
+  else if( choice === 'B' ){ num1 = b; }
+  else if( choice === 'C' ){ num1 = c; }
+  else if( choice === 'D' ){ num1 = d; }
+  else if( choice === 'E' ){ num1 = e; }
+
+  let player = String(num1);
+
+  const num2 = Math.floor( Math.random() * 5 + 1 );
+  let cpu = '';
+  if( num2==1 ) cpu = '1';
+  else if( num2==2 ) cpu = '2';
+  else if( num2==3 ) cpu = '3';
+  else if( num2==4 ) cpu = '4';
+  else cpu = '5';
+  
+  let judgement = '';
+  if( num1 < num2 ) {
+    {judgement = '負け';}
+    total += 1;
+  }
+  if( num1 == num2 ) {
+    {judgement = 'あいこ';}
+    total += 1;
+  }
+  if( num1 > num2 ){ 
+    {judgement = '勝ち', win += 1;}
+    total += 1;
+  }
+  
+  const display = {
+    your: player,
+    cpu: cpu,
+    judgement: judgement,
+    win: win,
+    total: total
+  }
+  res.render( 'size', display );
+});
 
 app.listen(8080, () => console.log("Example app listening on port 8080!"));

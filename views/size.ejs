@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>数字の大小</title>
+</head>
+<body>
+    <p>あなたの数字は<%= your %>です．</p>
+    <p>コンピュータの数字は<%= cpu %>です．</p>
+    <p>判定：<%= judgement %></p>
+    <p>現在<%= total %>試合中<%= win %>勝しています．</p>
+    <hr>
+    <form action="/size">
+        <input type="text" name="choice" required>
+        <label for="hand">次はA~Eのどれを選ぶ？</label>
+        <input type="hidden" name="win" value="<%= win %>">
+        <input type="hidden" name="total" value="<%= total %>">
+        <input type="submit" values="結果発表">
+    </form>   
+</body>
+</html>
