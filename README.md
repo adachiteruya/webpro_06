@@ -3,12 +3,15 @@
 24G1006　足立 輝弥
 
 ## このReadMeについて
-このReadMeは，app5.js内に記載したじゃんけん及びWebプログラミング第7週の課題で追加した機能2つについてソースコードやフローチャートを用いて説明したものである．
+このReadMeは，app5.js内に記載したじゃんけん及びWebプログラミング第7週の課題で追加した機能2つを中心に，app5.js全体についてソースコードやフローチャートを用いて説明したものである．
 ## ファイル一覧
 今回の課題では「あっち向いてホイ」と，ランダムな数字の大小で勝敗を決める「数字の大小(仮称)」の機能を追加した．
 ファイル名 | 説明
 -|-
 app5.js | プログラム本体
+views/show.ejs | /hello1，/hello2の結果画面
+views/icon.ejs | /iconの結果画面
+views/luck.ejs | おみくじの結果画面
 public/janken.html | じゃんけんの開始画面
 views/janken.ejs | じゃんけんの結果画面
 public/hoi.html | あっち向いてホイの開始画面
@@ -16,9 +19,98 @@ views/hoi.ejs | あっち向いてホイの結果画面
 public/size.html | 数字の大小の開始画面
 views/size.ejs | 数字の大小の結果画面
 
-## 1:じゃんけん
-まずはじゃんけんの機能について説明する．
+## 1:/hello1，/hello2
+まずは/hello1，/hello2について説明する．
 ### 1-1:ソースコード
+#### 1-1-1:/hello1
+```javascript
+app.get("/hello1", (req, res) => {
+  const message1 = "Hello world";
+  const message2 = "Bon jour";
+  res.render('show', { greet1:message1, greet2:message2});
+});
+```
+#### 1-1-2:/hello2
+```javascript
+app.get("/hello2", (req, res) => {
+  res.render('show', { greet1:"Hello world", greet2:"Bon jour"});
+});
+```
+
+### 1-2:起動方法及び動作内容
+1. app5.jsを起動する(ターミナルで```node app5.js```)
+1. Webブラウザで```localhost:8080/hello1```，```localhost:8080/hello2```にアクセスする
+1. views/show.ejsのフォーマットに則り，文字列が表示される．
+
+## 2:/icon
+次に/iconについて説明する．
+### 2-1:ソースコード
+```javascript
+app.get("/icon", (req, res) => {
+  res.render('icon', { filename:"./public/Apple_logo_black.svg", alt:"Apple Logo"});
+});
+```
+
+### 2-2:起動方法及び動作内容
+1. app5.jsを起動する(ターミナルで```node app5.js```)
+1. Webブラウザで```localhost:8080/icon```にアクセスする
+1. publicフォルダ内の画像(```Apple_logo_black.svg```)が表示される．
+
+## 3:おみくじ
+次におみくじについて説明する．
+### 3-1:ソースコード
+```javascript
+app.get("/luck", (req, res) => {
+  const num = Math.floor( Math.random() * 6 + 1 );
+  let luck = '';
+  if( num==1 ) luck = '大吉';
+  else if( num==2 ) luck = '吉';
+  else if( num==3 ) luck = '中吉';
+  else if( num==4 ) luck = '小吉';
+  else if( num==5 ) luck = '末吉';
+  else if( num==6 ) luck = '凶';
+  console.log( 'あなたの運勢は' + luck + 'です' );
+  res.render( 'luck', {number:num, luck:luck} );
+});
+```
+
+### 3-2:起動方法及び動作内容
+1. app5.jsを起動する(ターミナルで```node app5.js```)
+1. Webブラウザで```localhost:8080/luck```にアクセスする
+1. 生成された数字に応じたおみくじの結果(大吉〜凶)が表示される．
+
+### 3-3:フローチャート
+```mermaid
+flowchart TD;
+
+start["開始"];
+end1["終了"]
+if{"num==?"}
+result1["大吉"]
+result2["吉"]
+result3["中吉"]
+result4["小吉"]
+result5["末吉"]
+result6["凶"]
+
+start --> if
+if -->|num==1| result1
+result1 --> end1
+if -->|num==2| result2
+result2 --> end1
+if -->|num==3| result3
+result3 --> end1
+if -->|num==4| result4
+result4 --> end1
+if -->|num==5| result5
+result5 --> end1
+if -->|num==6| result6
+result6 --> end1
+```
+
+## 4:じゃんけん
+次にじゃんけんの機能について説明する．
+### 4-1:ソースコード
 ```javascript
 app.get("/janken", (req, res) => {
   let hand = req.query.hand;
@@ -62,13 +154,13 @@ app.get("/janken", (req, res) => {
 });
 ```
 
-### 1-2:起動方法及び動作内容
+### 4-2:起動方法及び動作内容
 1. app5.jsを起動する(ターミナルで```node app5.js```)
 1. Webブラウザで```localhost:8080/public/janken.html```にアクセスする
 1. 自分の手(グー、チョキ、パーのいずれか)をテキストボックス内に入力する
 1. 一般的なじゃんけんのルールに則り，勝敗が決定する
 
-## 1-3:フローチャート
+### 4-3:フローチャート
 ```mermaid
 flowchart TD;
 
@@ -92,10 +184,10 @@ lose --> total
 total --> end1
 ```
 
-## 2:あっち向いてホイ
+## 5:あっち向いてホイ
 次に，あっち向いてホイの機能について説明する．なお，本課題ではコンピュータが指を指す側，プレイヤーが顔を振る側とした．
 そのため，プレイヤーが選択した顔の向きとコンピュータが指した指の方向が違う場合は勝ちとし，同じである場合のみを負けとする．
-### 2-1:ソースコード
+### 5-1:ソースコード
 ```javascript
 app.get("/hoi", (req, res) => {
   let face = req.query.face;
@@ -150,13 +242,13 @@ app.get("/hoi", (req, res) => {
 });
 ```
 
-### 2-2:起動方法及び動作内容
+### 5-2:起動方法及び動作内容
 1. app5.jsを起動する(ターミナルで```node app5.js```)
 1. Webブラウザで```localhost:8080/public/hoi.html```にアクセスする
 1. 自分の顔の向き(上下左右いずれか)をテキストボックス内に入力する
 1. 今回設定した(本章の頭で説明した)ルールに則り，勝敗が決定する
 
-### 2-3:フローチャート
+### 5-3:フローチャート
 ```mermaid
 flowchart TD;
 
@@ -177,10 +269,10 @@ lose --> total
 total --> end1
 ```
 
-## 3:数字の大小
+## 6:数字の大小
 最後に，数字の大小の機能について説明する．このソースコードは，選択肢であるAからEの5つのアルファベットに1から5の数字をランダムに代入し，
 選んだアルファベットに対応する数字とコンピュータの提示する数字の大小を競いあうというものである．
-### 3-1:ソースコード
+### 6-1:ソースコード
 ```javascript
 app.get("/size", (req, res) => {
   let choice = req.query.choice;
@@ -247,13 +339,13 @@ app.get("/size", (req, res) => {
 });
 ```
 
-### 3-2:起動方法及び動作内容
+### 6-2:起動方法及び動作内容
 1. app5.jsを起動する(ターミナルで```node app5.js```)
 1. Webブラウザで```localhost:8080/public/size.html```にアクセスする
 1. A,B,C,D,Eのうちいずれかをテキストボックス内に入力する
 1. 選んだアルファベットに対応する数字とコンピュータの提示する数字の大小により，勝敗が決定する
 
-### 3-3 フローチャート
+### 6-3 フローチャート
 ```mermaid
 flowchart TD;
 
