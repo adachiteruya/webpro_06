@@ -157,7 +157,7 @@ document.querySelector('#check').addEventListener('click', () => {
                         deletePost(mes.id);
                     });
 
-                    let likeButton = document.createElement("button");
+                    let likeButton = document.createElement('button');
                     likeButton.className = 'like';
                     likeButton.innerText = `いいね (${mes.likes})`;  // いいね数を表示
 
