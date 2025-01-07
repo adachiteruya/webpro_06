@@ -160,7 +160,6 @@ document.querySelector('#check').addEventListener('click', () => {
                     let likeButton = document.createElement('button');
                     likeButton.className = 'like';
                     likeButton.innerText = `いいね (${mes.likes})`;  // いいね数を表示
-
                     likeButton.addEventListener("click", () => {
                         likePost(mes.id);  // 投稿IDを渡して「いいね」を送信
                     });
