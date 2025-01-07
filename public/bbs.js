@@ -162,7 +162,7 @@ document.querySelector('#check').addEventListener('click', () => {
                     likeButton.innerText = `いいね (${mes.likes})`;  // いいね数を表示
 
                     likeButton.addEventListener("click", () => {
-                    likePost(mes.id);  // 投稿IDを渡して「いいね」を送信
+                        likePost(mes.id);  // 投稿IDを渡して「いいね」を送信
                     });
 
                     cover.appendChild( name_area );
