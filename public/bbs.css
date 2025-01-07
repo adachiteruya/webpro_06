@@ -1,0 +1,20 @@
+.cover {
+    border-bottom: 1px solid #c0c0c0;
+    margin: 3px;
+}
+
+.name {
+    font-weight: bold;
+    width: 8em;
+}
+
+.mes {
+    margin-left: 20px;
+    flex-grow: 1;
+}
+
+.time {
+    margin-left: 20px;
+    white-space: nowrap;
+    text-align: right;
+}
